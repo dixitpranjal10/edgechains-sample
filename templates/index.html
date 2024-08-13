@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generative Story App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Generative Story App</h1>
+    <form id="storyForm">
+        <label for="prompt">Enter a prompt:</label>
+        <input type="text" id="prompt" name="prompt">
+        <button type="submit">Generate Story</button>
+    </form>
+    <div id="result">
+        <h2>Your Story:</h2>
+        <p id="storyOutput"></p>
+    </div>
+
+    <script>
+        document.getElementById('storyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ prompt: prompt }),
+            });
+            const data = await response.json();
+            document.getElementById('storyOutput').innerText = data.story;
+        });
+    </script>
+</body>
+</html>
